@@ -14,8 +14,7 @@ import java.io.IOException;
 
 public class UltimateTicTacToe extends PApplet {
 
-//fix red tile and gui
-//fix blue cant win
+//guide user and alert for tie
 
 
 //still think theres another solution other than line 69
@@ -53,7 +52,6 @@ public void setup() {
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
-  game.winner = 1;
 
   for (int i = 0; i < bigTiles.length; i++) {
     int j = i;
@@ -100,7 +98,7 @@ public void setup() {
 }
 
 public void draw() {
-  println(mouseX,mouseY);
+  // println(mouseX,mouseY);
   background(210);
   // bigTile.run();
   // bigTile2.run();
@@ -240,6 +238,7 @@ class Game {
   int playerTurn = 1;
   int player1Value = 1;
   int player2Value = -1;
+  int tieValue = -5;
   int winner = 0;
 
   int[] values = new int[8];
@@ -263,18 +262,29 @@ class Game {
     for (int i = 0; i < values.length; i++) {
       if (values[i] == player1Value*3) {
         winner = 1;
-        println("winner is red!!");
+        // println("winner is red!!");
       } else if (values[i] == player2Value*3) {
         winner = 2;
-        println("winner is blue!!");
+        // println("winner is blue!!");
       }
+    }
+    int markedTiles = 0;
+    for (BigTile big : bigTiles) {
+      for (Tile small : big.tiles) {
+        if (small.marked) {
+          markedTiles++;
+        }
+      }
+    }
+    if (markedTiles == 81) {
+      winner = tieValue;
     }
   }
 
   public void alert(int winner) { //gui for play again
     playerTurn = 0;
     fill(210);
-    if (winner == 0) {
+    if (winner == tieValue) {
       textSize(100);
       text("Tie!", width/2, height/2-50);
       if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
@@ -285,7 +295,7 @@ class Game {
       }
       textSize(50);
       text("Play Again", width/2, height/2+50);
-    } else if (winner == 1) {
+    } else if (winner == player1Value) {
       textSize(100);
       text("Red Wins!", width/2, height/2-50);
       if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
@@ -296,7 +306,7 @@ class Game {
       }
       textSize(50);
       text("Play Again", width/2, height/2+50);
-    } else if (winner == 2) {
+    } else if (winner == player2Value) {
       textSize(100);
       text("Blue Wins!", width/2, height/2-50);
       if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
@@ -416,14 +426,24 @@ class BigTile {
         tile.c = game.player1Color;
         tile.marked = true;
       }
-      println("winner is red");
+      // println("winner is red");
     } else if (winner == game.player2Value) {
       for (Tile tile : tiles) {
         tile.c = game.player2Color;
         tile.marked = true;
       }
-      println("winner is blue");
+      // println("winner is blue");
     }
+    // int numMarked = 0;
+    // for (Tile tile : tiles) {
+    //   if (tile.marked) {
+    //     numMarked++;
+    //   }
+    // }
+    // if (numMarked==9) {
+    //   winner = game.tieValue;
+    // }
+
   }
 
   public void run() {
