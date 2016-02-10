@@ -12,9 +12,10 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class ultimateTictactoe extends PApplet {
+public class UltimateTicTacToe extends PApplet {
 
 //fix red tile and gui
+//fix blue cant win
 
 
 //still think theres another solution other than line 69
@@ -48,10 +49,11 @@ BigTile[] bigTiles = new BigTile[9];
 
 Tile[] tiles = new Tile[9];
 public void setup() {
-  
+  size(900, 900);
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
+  game.winner = 1;
 
   for (int i = 0; i < bigTiles.length; i++) {
     int j = i;
@@ -98,6 +100,7 @@ public void setup() {
 }
 
 public void draw() {
+  println(mouseX,mouseY);
   background(210);
   // bigTile.run();
   // bigTile2.run();
@@ -274,7 +277,7 @@ class Game {
     if (winner == 0) {
       textSize(100);
       text("Tie!", width/2, height/2-50);
-      if (mouseX > 170 && mouseX < 170+260 && mouseY < 334+40 && mouseY > 334) {
+      if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
         fill(150);
         if (mousePressed) {
           restartGame();
@@ -285,7 +288,7 @@ class Game {
     } else if (winner == 1) {
       textSize(100);
       text("Red Wins!", width/2, height/2-50);
-      if (mouseX > 170 && mouseX < 170+260 && mouseY < 334+40 && mouseY > 334) {
+      if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
         fill(150);
         if (mousePressed) {
           restartGame();
@@ -296,7 +299,7 @@ class Game {
     } else if (winner == 2) {
       textSize(100);
       text("Blue Wins!", width/2, height/2-50);
-      if (mouseX > 170 && mouseX < 170+260 && mouseY < 334+40 && mouseY > 334) {
+      if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
         fill(150);
         if (mousePressed) {
           restartGame();
@@ -341,6 +344,8 @@ public void restartGame() { //resets everything
     }
     bigTiles[i] = new BigTile(x,y);
   }
+  debug = true;
+  debugFrameCount = frameCount;
 }
 
 class BigTile {
@@ -401,18 +406,18 @@ class BigTile {
   public void determineWin() { //determines winner of big tile
     for (int i = 0; i < values.length; i++) {
       if (values[i] == game.player1Value*3) {
-        winner = 1;
+        winner = game.player1Value;
       } else if (values[i] == game.player2Value*3) {
-        winner = 2;
+        winner = game.player2Value;
       }
     }
-    if (winner == 1) {
+    if (winner == game.player1Value) {
       for (Tile tile : tiles) {
         tile.c = game.player1Color;
         tile.marked = true;
       }
       println("winner is red");
-    } else if (winner == 2) {
+    } else if (winner == game.player2Value) {
       for (Tile tile : tiles) {
         tile.c = game.player2Color;
         tile.marked = true;
@@ -434,9 +439,8 @@ class BigTile {
     }
   }
 }
-  public void settings() {  size(900, 900); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "ultimateTictactoe" };
+    String[] appletArgs = new String[] { "UltimateTicTacToe" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
