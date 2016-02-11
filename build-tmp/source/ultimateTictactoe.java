@@ -12,9 +12,9 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class UltimateTicTacToe extends PApplet {
+public class ultimateTictactoe extends PApplet {
 
-//guide user and alert for tie
+//guide user line 447
 
 
 //still think theres another solution other than line 69
@@ -46,9 +46,10 @@ BigTile bigTile;
 BigTile bigTile2;
 BigTile[] bigTiles = new BigTile[9];
 
+
 Tile[] tiles = new Tile[9];
 public void setup() {
-  size(900, 900);
+  
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
@@ -71,7 +72,7 @@ public void setup() {
         y = 600;
       }
     }
-    bigTiles[i] = new BigTile(x,y);
+    bigTiles[i] = new BigTile(x,y,i);
   }
 
   // for (int i = 0; i < tiles.length; i++) {
@@ -98,12 +99,14 @@ public void setup() {
 }
 
 public void draw() {
-  // println(mouseX,mouseY);
   background(210);
   // bigTile.run();
   // bigTile2.run();
   for (BigTile biggie : bigTiles) {
       biggie.run();
+      if (biggie.winner != 0) {
+        println(biggie.winner);
+      }
   }
 
   stroke(80);
@@ -115,74 +118,25 @@ public void draw() {
   noStroke();
 
   game.run();
- }
-
-// void draw() {
-//   background(210);
-//   if (game.numTurns == 9 && game.winner == 0) { //for tie
-//     for (int i = 0; i < tiles.length; i++) {
-//       tiles[i].display();
-//     }
-//     game.alert(0);
-//   } else if (game.winner != 0) { //if there is a winner
-//     for (int i = 0; i < tiles.length; i++) {
-//       tiles[i].display();
-//     }
-//     game.alert(game.winner);
-//   } else if (game.winner == 0 && frameCount > debugFrameCount+10) { //delays after every click but there is a better way, check commented draw(){} below
-//     for (int i = 0; i < tiles.length; i++) {
-//       tiles[i].display();
-//       tiles[i].changeColor();
-//     }
-//     game.getValues();
-//     game.determineWin();
-//   }
-// }
-
-// void draw() {
-//   background(210);
-//   if (game.winner == 1) {
-//     for (int i = 0; i < tiles.length; i++) {
-//       tiles[i].display();
-//     }
-//     game.alert(game.winner);
-//   } else if (game.winner == 2) {
-//     for (int i = 0; i < tiles.length; i++) {
-//       tiles[i].display();
-//     }
-//     game.alert(game.winner);
-//   } else if (game.winner == 0 && debug) { //for debug info check debugFrameCount comment
-//     if (frameCount > debugFrameCount+10) {
-//       for (int i = 0; i < tiles.length; i++) {
-//         tiles[i].display();
-//         tiles[i].changeColor();
-//       }
-//       game.getValues();
-//       game.determineWin();
-//     }
-//     debug = false;
-//   } else if (game.winner == 0) {
-//     for (int i = 0; i < tiles.length; i++) {
-//       tiles[i].display();
-//       tiles[i].changeColor();
-//     }
-//     game.getValues();
-//     game.determineWin();
-//   }
-
-// }
+  println(game.goAnywhere);
+}
 
 class Tile {
+  int id; //for id to play on
+  int id2;
   int x, y;
   int w = 100;
   int h = 100;
   int value = 0;
   boolean marked = false;
+  boolean changedColor = false;
   int c = color(game.unmarkedColor);
 
-  Tile(int x, int y) {
+  Tile(int x, int y, int id, int id2) {
     this.x = x;
     this.y = y;
+    this.id = id;
+    this.id2 = id2;
   }
 
   public void display() {
@@ -191,8 +145,33 @@ class Tile {
     rect(x, y, w, h);
   }
 
+  public Boolean changedColor() {
+    if (changedColor) {
+      changedColor = false;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void unavailableColor() {
+    if (c == game.unmarkedColor) {
+      c = game.unavailableColor;
+    } else if (c == game.player1Color) {
+      c = game.player1UnavailableColor;
+    } else if (c == game.player2Color) {
+      c = game.player2UnavailableColor;
+    }
+  }
+
   public void changeColor() {
-    // println(frameCount);
+    if (c == game.unavailableColor) { //changes from unavailable color to regular color
+      c = game.unmarkedColor;
+    } else if (c == game.player1UnavailableColor) {
+      c = game.player1Color;
+    } else if (c == game.player2UnavailableColor) {
+      c = game.player2Color;
+    }
     if (!marked && game.winner == 0) {
       c = game.unmarkedColor;
       if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) { //if cursor is inside tile
@@ -203,6 +182,8 @@ class Tile {
             marked = true;
             game.playerTurn = 2;
             value = game.player1Value;
+            changedColor = true;
+            game.goAnywhere = false;
           } else {
             c = game.player1PreviewColor;
           }
@@ -213,9 +194,11 @@ class Tile {
             marked = true;
             game.playerTurn = 1;
             value = game.player2Value;
-          } else {
-            c = game.player2PreviewColor;
-          }
+            changedColor = true;
+            game.goAnywhere = false;
+            } else {
+              c = game.player2PreviewColor;
+            }
         } else {
           c = game.unmarkedColor;
         }
@@ -228,22 +211,36 @@ class Game {
   int numTurns = 0;
 
   int player1Color = color(250, 50, 20, 235);
+  int player1UnavailableColor = color(150, 50, 20, 235);
   int player1PreviewColor = color(250, 50, 20, 135);
 
   int player2Color = color(20, 50, 250, 235);
+  int player2UnavailableColor = color(20, 50, 150, 235);
   int player2PreviewColor = color(20, 50, 250, 135);
 
   int unmarkedColor = color(100);
+  int unavailableColor = color(50);
 
   int playerTurn = 1;
   int player1Value = 1;
   int player2Value = -1;
   int tieValue = -5;
   int winner = 0;
+  int idToPlayOn;
+  boolean goAnywhere = true;
 
   int[] values = new int[8];
 
   Game() {}
+
+
+  public void checkForGoAnywhere() {
+    for (BigTile big : bigTiles) {
+      if (big.numMarked == 9 || big.winner != 0 && idToPlayOn == big.id) {
+        goAnywhere = true;
+      }
+    }
+  }
 
   public void getValues() {
     values[0] = bigTiles[0].winner + bigTiles[3].winner + bigTiles[6].winner; //refer to diagram 2
@@ -326,6 +323,7 @@ class Game {
     } else {
       getValues();
       determineWin();
+      checkForGoAnywhere();
     }
   }
 }
@@ -352,18 +350,22 @@ public void restartGame() { //resets everything
         y = 600;
       }
     }
-    bigTiles[i] = new BigTile(x,y);
+    bigTiles[i] = new BigTile(x,y,i);
   }
+  game.goAnywhere = true;
   debug = true;
   debugFrameCount = frameCount;
 }
 
 class BigTile {
+  int numMarked;
+  int id;
   int winner = 0;
   Tile[] tiles = new Tile[9];
   int[] values = new int[8];
 
-  BigTile(int x, int y) {
+  BigTile(int x, int y, int id) {
+    this.id = id;
     for (int i = 0; i < tiles.length; i++) {
       int j = i;
 
@@ -384,7 +386,7 @@ class BigTile {
         }
       }
   
-      tiles[i] = new Tile(xPos, yPos);
+      tiles[i] = new Tile(xPos, yPos, i, id);
     }
   }
 
@@ -426,41 +428,54 @@ class BigTile {
         tile.c = game.player1Color;
         tile.marked = true;
       }
-      // println("winner is red");
     } else if (winner == game.player2Value) {
       for (Tile tile : tiles) {
         tile.c = game.player2Color;
         tile.marked = true;
       }
-      // println("winner is blue");
     }
-    // int numMarked = 0;
-    // for (Tile tile : tiles) {
-    //   if (tile.marked) {
-    //     numMarked++;
-    //   }
-    // }
-    // if (numMarked==9) {
-    //   winner = game.tieValue;
-    // }
-
   }
 
   public void run() {
     display();
-    if (winner == 0) {
+    if (winner == 0 && game.idToPlayOn == id) { //play on id
       if (debug && frameCount > debugFrameCount + 15) {
         changeColor();
       } else if (!debug) {
         changeColor();
       }
+      for (Tile small : tiles) {
+        if (small.changedColor()) {
+          game.idToPlayOn = small.id; //set id to play on to the small tile's id
+          numMarked++;
+        }
+      }
       getValues();
       determineWin();
+    } else if (game.goAnywhere) {
+      if (debug && frameCount > debugFrameCount + 15) {
+        changeColor();
+      } else if (!debug) {
+        changeColor();
+      }
+      for (Tile small : tiles) {
+        if (small.changedColor()) {
+          game.idToPlayOn = small.id; //set id to play on to the small tile's id
+          numMarked++;
+        }
+      }
+      getValues();
+      determineWin();
+    } else if (game.idToPlayOn != id) {
+      for (Tile small : tiles) {
+        small.unavailableColor();
+      }
     }
   }
 }
+  public void settings() {  size(900, 900); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "UltimateTicTacToe" };
+    String[] appletArgs = new String[] { "ultimateTictactoe" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
