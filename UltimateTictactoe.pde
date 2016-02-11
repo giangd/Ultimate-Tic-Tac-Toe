@@ -67,9 +67,6 @@ void draw() {
   // bigTile2.run();
   for (BigTile biggie : bigTiles) {
       biggie.run();
-      if (biggie.winner != 0) {
-        println(biggie.values);
-      }
   }
 
   stroke(80);
