@@ -14,9 +14,10 @@ import java.io.IOException;
 
 public class ultimateTictactoe extends PApplet {
 
-//guide user line 447
 
+//maybe let user choose if they want to play freestyle or ultimate
 
+//if you want to work on this bug go to normal tic tac toe
 //still think theres another solution other than line 69
 //i dont want to delay everytime after user pressed a tile
 //the bug was that the middle tile was being activated after user pressed play again and the game restarted
@@ -104,9 +105,6 @@ public void draw() {
   // bigTile2.run();
   for (BigTile biggie : bigTiles) {
       biggie.run();
-      if (biggie.winner != 0) {
-        println(biggie.winner);
-      }
   }
 
   stroke(80);
@@ -118,7 +116,6 @@ public void draw() {
   noStroke();
 
   game.run();
-  println(game.goAnywhere);
 }
 
 class Tile {
@@ -164,7 +161,7 @@ class Tile {
     }
   }
 
-  public void changeColor() {
+  public void availableColor() {
     if (c == game.unavailableColor) { //changes from unavailable color to regular color
       c = game.unmarkedColor;
     } else if (c == game.player1UnavailableColor) {
@@ -172,6 +169,10 @@ class Tile {
     } else if (c == game.player2UnavailableColor) {
       c = game.player2Color;
     }
+  }
+
+  public void changeColor() {
+    availableColor();
     if (!marked && game.winner == 0) {
       c = game.unmarkedColor;
       if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) { //if cursor is inside tile
@@ -251,7 +252,6 @@ class Game {
     values[5] = bigTiles[6].winner + bigTiles[7].winner + bigTiles[8].winner;
     values[6] = bigTiles[0].winner + bigTiles[4].winner + bigTiles[8].winner;
     values[7] = bigTiles[2].winner + bigTiles[4].winner + bigTiles[6].winner;
-    // println(values);
     //values = {v1, v2, v3, h1, h2, h3, d1, d2};
   }
 
@@ -259,10 +259,8 @@ class Game {
     for (int i = 0; i < values.length; i++) {
       if (values[i] == player1Value*3) {
         winner = 1;
-        // println("winner is red!!");
       } else if (values[i] == player2Value*3) {
         winner = 2;
-        // println("winner is blue!!");
       }
     }
     int markedTiles = 0;
@@ -314,6 +312,11 @@ class Game {
       }
       textSize(50);
       text("Play Again", width/2, height/2+50);
+    }
+    for (BigTile big : bigTiles) {
+      for (Tile small : big.tiles) {
+        small.availableColor();
+      }
     }
   }
 

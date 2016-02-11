@@ -145,7 +145,7 @@ class Tile {
     }
   }
 
-  void changeColor() {
+  void availableColor() {
     if (c == game.unavailableColor) { //changes from unavailable color to regular color
       c = game.unmarkedColor;
     } else if (c == game.player1UnavailableColor) {
@@ -153,6 +153,10 @@ class Tile {
     } else if (c == game.player2UnavailableColor) {
       c = game.player2Color;
     }
+  }
+
+  void changeColor() {
+    availableColor();
     if (!marked && game.winner == 0) {
       c = game.unmarkedColor;
       if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) { //if cursor is inside tile
@@ -292,6 +296,11 @@ class Game {
       }
       textSize(50);
       text("Play Again", width/2, height/2+50);
+    }
+    for (BigTile big : bigTiles) {
+      for (Tile small : big.tiles) {
+        small.availableColor();
+      }
     }
   }
 
