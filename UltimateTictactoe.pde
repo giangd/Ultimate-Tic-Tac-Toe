@@ -59,28 +59,6 @@ void setup() {
     }
     bigTiles[i] = new BigTile(x,y,i);
   }
-
-  // for (int i = 0; i < tiles.length; i++) {
-  //   int j = i;
-  //   if (i > 2) { //refer to diagram 1
-  //     j = i-3;
-  //     if (i > 5) {
-  //       j = i-6;
-  //     }
-  //   }
-
-  //   int x = j*200; //200 is width of "Tile" object
-
-  //   int y = 0;
-  //   if (i > 2) { //refer to diagram 1
-  //     y = 200;
-  //     if (i > 5) {
-  //       y = 400;
-  //     }
-  //   }
-
-  //   tiles[i] = new Tile(x, y);
-  // }
 }
 
 void draw() {
@@ -242,9 +220,9 @@ class Game {
   void determineWin() { //determines winner
     for (int i = 0; i < values.length; i++) {
       if (values[i] == player1Value*3) {
-        winner = 1;
+        winner = player1Value;
       } else if (values[i] == player2Value*3) {
-        winner = 2;
+        winner = player2Value;
       }
     }
     int markedTiles = 0;

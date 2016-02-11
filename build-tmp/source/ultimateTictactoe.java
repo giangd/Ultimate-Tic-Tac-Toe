@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class ultimateTictactoe extends PApplet {
+public class UltimateTicTacToe extends PApplet {
 
 
 //maybe let user choose if they want to play freestyle or ultimate
@@ -50,7 +50,7 @@ BigTile[] bigTiles = new BigTile[9];
 
 Tile[] tiles = new Tile[9];
 public void setup() {
-  
+  size(900, 900);
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
@@ -75,6 +75,9 @@ public void setup() {
     }
     bigTiles[i] = new BigTile(x,y,i);
   }
+  bigTiles[0].winner = -1;
+  bigTiles[1].winner = -1;
+  bigTiles[2].winner = -1;
 
   // for (int i = 0; i < tiles.length; i++) {
   //   int j = i;
@@ -105,6 +108,12 @@ public void draw() {
   // bigTile2.run();
   for (BigTile biggie : bigTiles) {
       biggie.run();
+<<<<<<< HEAD
+=======
+      if (biggie.winner != 0) {
+        println(biggie.values);
+      }
+>>>>>>> 90764519d2f8be8ee540e8c979779d7c336690e6
   }
 
   stroke(80);
@@ -258,9 +267,15 @@ class Game {
   public void determineWin() { //determines winner
     for (int i = 0; i < values.length; i++) {
       if (values[i] == player1Value*3) {
+<<<<<<< HEAD
         winner = 1;
       } else if (values[i] == player2Value*3) {
         winner = 2;
+=======
+        winner = player1Value;
+      } else if (values[i] == player2Value*3) {
+        winner = player2Value;
+>>>>>>> 90764519d2f8be8ee540e8c979779d7c336690e6
       }
     }
     int markedTiles = 0;
@@ -476,9 +491,8 @@ class BigTile {
     }
   }
 }
-  public void settings() {  size(900, 900); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "ultimateTictactoe" };
+    String[] appletArgs = new String[] { "UltimateTicTacToe" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
