@@ -12,11 +12,12 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class ultimateTictactoe extends PApplet {
-
-//guide user line 447
+public class UltimateTicTacToe extends PApplet {
 
 
+//maybe let user choose if they want to play freestyle or ultimate
+
+//if you want to work on this bug go to normal tic tac toe
 //still think theres another solution other than line 69
 //i dont want to delay everytime after user pressed a tile
 //the bug was that the middle tile was being activated after user pressed play again and the game restarted
@@ -49,7 +50,7 @@ BigTile[] bigTiles = new BigTile[9];
 
 Tile[] tiles = new Tile[9];
 public void setup() {
-  
+  size(900, 900);
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
@@ -74,6 +75,9 @@ public void setup() {
     }
     bigTiles[i] = new BigTile(x,y,i);
   }
+  bigTiles[0].winner = -1;
+  bigTiles[1].winner = -1;
+  bigTiles[2].winner = -1;
 
   // for (int i = 0; i < tiles.length; i++) {
   //   int j = i;
@@ -105,7 +109,7 @@ public void draw() {
   for (BigTile biggie : bigTiles) {
       biggie.run();
       if (biggie.winner != 0) {
-        println(biggie.winner);
+        println(biggie.values);
       }
   }
 
@@ -118,7 +122,6 @@ public void draw() {
   noStroke();
 
   game.run();
-  println(game.goAnywhere);
 }
 
 class Tile {
@@ -251,18 +254,15 @@ class Game {
     values[5] = bigTiles[6].winner + bigTiles[7].winner + bigTiles[8].winner;
     values[6] = bigTiles[0].winner + bigTiles[4].winner + bigTiles[8].winner;
     values[7] = bigTiles[2].winner + bigTiles[4].winner + bigTiles[6].winner;
-    // println(values);
     //values = {v1, v2, v3, h1, h2, h3, d1, d2};
   }
 
   public void determineWin() { //determines winner
     for (int i = 0; i < values.length; i++) {
       if (values[i] == player1Value*3) {
-        winner = 1;
-        // println("winner is red!!");
+        winner = player1Value;
       } else if (values[i] == player2Value*3) {
-        winner = 2;
-        // println("winner is blue!!");
+        winner = player2Value;
       }
     }
     int markedTiles = 0;
@@ -473,9 +473,8 @@ class BigTile {
     }
   }
 }
-  public void settings() {  size(900, 900); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "ultimateTictactoe" };
+    String[] appletArgs = new String[] { "UltimateTicTacToe" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
