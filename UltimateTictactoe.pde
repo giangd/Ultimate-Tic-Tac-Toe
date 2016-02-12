@@ -1,3 +1,5 @@
+//webpage doesnt work
+//prints hi only once?
 
 //maybe let user choose if they want to play freestyle or ultimate
 
@@ -78,6 +80,7 @@ void draw() {
   noStroke();
 
   game.run();
+  println("hi");
 }
 
 class Tile {
