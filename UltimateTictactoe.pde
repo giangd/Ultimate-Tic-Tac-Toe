@@ -241,18 +241,7 @@ class Game {
   void alert(int winner) { //gui for play again
     playerTurn = 0;
     fill(210);
-    if (winner == tieValue) {
-      textSize(100);
-      text("Tie!", width/2, height/2-50);
-      if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
-        fill(150);
-        if (mousePressed) {
-          restartGame();
-        }
-      }
-      textSize(50);
-      text("Play Again", width/2, height/2+50);
-    } else if (winner == player1Value) {
+    if (winner == player1Value) {
       textSize(100);
       text("Red Wins!", width/2, height/2-50);
       if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
@@ -266,6 +255,17 @@ class Game {
     } else if (winner == player2Value) {
       textSize(100);
       text("Blue Wins!", width/2, height/2-50);
+      if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
+        fill(150);
+        if (mousePressed) {
+          restartGame();
+        }
+      }
+      textSize(50);
+      text("Play Again", width/2, height/2+50);
+    } else if (winner == tieValue) {
+      textSize(100);
+      text("Tie!", width/2, height/2-50);
       if (mouseX > 320 && mouseX < 575 && mouseY < 535 && mouseY > 480) {
         fill(150);
         if (mousePressed) {
