@@ -16,7 +16,6 @@
 // height of each tile is 200
 // size of display is 600 by 600
 
-
 // Diagram 2
 // ---------
 // int[] values = {v1, v2, v3, h1, h2, h3, d1, d2}; 
