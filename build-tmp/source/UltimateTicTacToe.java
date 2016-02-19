@@ -52,7 +52,7 @@ BigTile[] bigTiles = new BigTile[9];
 
 Tile[] tiles = new Tile[9];
 public void setup() {
-  
+  size(900, 900);
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
@@ -106,7 +106,7 @@ class Tile {
   int h = 100;
   int value = 0;
   boolean marked = false;
-  boolean hasColorChanged = false;
+  boolean colorChanged = false;
   int c = color(game.unmarkedColor);
 
   Tile(int x, int y, int id, int id2) {
@@ -123,8 +123,8 @@ class Tile {
   }
 
   public Boolean hasColorChanged() {
-    if (hasColorChanged) {
-      hasColorChanged = false;
+    if (colorChanged) {
+      colorChanged = false;
       return true;
     } else {
       return false;
@@ -163,7 +163,7 @@ class Tile {
             marked = true;
             game.playerTurn = 2;
             value = game.player1Value;
-            hasColorChanged = true;
+            colorChanged = true;
             game.goAnywhere = false;
           } else {
             c = game.player1PreviewColor;
@@ -175,7 +175,7 @@ class Tile {
             marked = true;
             game.playerTurn = 1;
             value = game.player2Value;
-            hasColorChanged = true;
+            colorChanged = true;
             game.goAnywhere = false;
             } else {
               c = game.player2PreviewColor;
@@ -470,7 +470,6 @@ public void keyPressed() {
     restartGame();
   }
 }
-  public void settings() {  size(900, 900); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "UltimateTicTacToe" };
     if (passedArgs != null) {

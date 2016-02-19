@@ -90,7 +90,7 @@ class Tile {
   int h = 100;
   int value = 0;
   boolean marked = false;
-  boolean hasColorChanged = false;
+  boolean colorChanged = false;
   color c = color(game.unmarkedColor);
 
   Tile(int x, int y, int id, int id2) {
@@ -107,8 +107,8 @@ class Tile {
   }
 
   Boolean hasColorChanged() {
-    if (hasColorChanged) {
-      hasColorChanged = false;
+    if (colorChanged) {
+      colorChanged = false;
       return true;
     } else {
       return false;
@@ -147,7 +147,7 @@ class Tile {
             marked = true;
             game.playerTurn = 2;
             value = game.player1Value;
-            hasColorChanged = true;
+            colorChanged = true;
             game.goAnywhere = false;
           } else {
             c = game.player1PreviewColor;
@@ -159,7 +159,7 @@ class Tile {
             marked = true;
             game.playerTurn = 1;
             value = game.player2Value;
-            hasColorChanged = true;
+            colorChanged = true;
             game.goAnywhere = false;
             } else {
               c = game.player2PreviewColor;
