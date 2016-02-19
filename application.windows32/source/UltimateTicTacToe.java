@@ -1,3 +1,19 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class UltimateTicTacToe extends PApplet {
+
 //webpage doesnt work
 //prints hi only once?
 
@@ -27,7 +43,7 @@
 // d is diagonal
 
 double debugFrameCount;
-boolean debug = false; //for bug that made tile in middle get marked after user pressed play again 
+boolean debug = false; //for dumb bug that made tile in middle get marked after user pressed play again 
 Game game = new Game();
 BigTile bigTile;
 BigTile bigTile2;
@@ -35,8 +51,8 @@ BigTile[] bigTiles = new BigTile[9];
 
 
 Tile[] tiles = new Tile[9];
-void setup() {
-  size(900, 900);
+public void setup() {
+  
   textAlign(CENTER, CENTER);
   textSize(100);
   noStroke();
@@ -63,7 +79,7 @@ void setup() {
   }
 }
 
-void draw() {
+public void draw() {
   background(210);
   // bigTile.run();
   // bigTile2.run();
@@ -90,8 +106,8 @@ class Tile {
   int h = 100;
   int value = 0;
   boolean marked = false;
-  boolean hasColorChanged = false;
-  color c = color(game.unmarkedColor);
+  boolean changedColor = false;
+  int c = color(game.unmarkedColor);
 
   Tile(int x, int y, int id, int id2) {
     this.x = x;
@@ -100,22 +116,22 @@ class Tile {
     this.id2 = id2;
   }
 
-  void display() {
+  public void display() {
     fill(c);
     // fill(random(256));
     rect(x, y, w, h);
   }
 
-  Boolean hasColorChanged() {
-    if (hasColorChanged) {
-      hasColorChanged = false;
+  public Boolean changedColor() {
+    if (changedColor) {
+      changedColor = false;
       return true;
     } else {
       return false;
     }
   }
 
-  void unavailableColor() {
+  public void unavailableColor() {
     if (c == game.unmarkedColor) {
       c = game.unavailableColor;
     } else if (c == game.player1Color) {
@@ -125,7 +141,7 @@ class Tile {
     }
   }
 
-  void availableColor() {
+  public void availableColor() {
     if (c == game.unavailableColor) { //changes from unavailable color to regular color
       c = game.unmarkedColor;
     } else if (c == game.player1UnavailableColor) {
@@ -135,7 +151,7 @@ class Tile {
     }
   }
 
-  void changeColor() {
+  public void changeColor() {
     availableColor();
     if (!marked && game.winner == 0) {
       c = game.unmarkedColor;
@@ -147,7 +163,7 @@ class Tile {
             marked = true;
             game.playerTurn = 2;
             value = game.player1Value;
-            hasColorChanged = true;
+            changedColor = true;
             game.goAnywhere = false;
           } else {
             c = game.player1PreviewColor;
@@ -159,7 +175,7 @@ class Tile {
             marked = true;
             game.playerTurn = 1;
             value = game.player2Value;
-            hasColorChanged = true;
+            changedColor = true;
             game.goAnywhere = false;
             } else {
               c = game.player2PreviewColor;
@@ -175,13 +191,13 @@ class Tile {
 class Game {
   int numTurns = 0;
 
-  color player1Color = color(250, 50, 20, 235);
-  color player1UnavailableColor = color(150, 50, 20, 235);
-  color player1PreviewColor = color(250, 50, 20, 135);
+  int player1Color = color(250, 50, 20, 235);
+  int player1UnavailableColor = color(150, 50, 20, 235);
+  int player1PreviewColor = color(250, 50, 20, 135);
 
-  color player2Color = color(20, 50, 250, 235);
-  color player2UnavailableColor = color(20, 50, 150, 235);
-  color player2PreviewColor = color(20, 50, 250, 135);
+  int player2Color = color(20, 50, 250, 235);
+  int player2UnavailableColor = color(20, 50, 150, 235);
+  int player2PreviewColor = color(20, 50, 250, 135);
 
   // color player1Color = color(255, 97, 56);
   // color player1UnavailableColor = color(155, 97, 56);
@@ -191,8 +207,8 @@ class Game {
   // color player2UnavailableColor = color(0, 133, 106);
   // color player2PreviewColor = color(121, 189, 144);
 
-  color unmarkedColor = color(100);
-  color unavailableColor = color(50);
+  int unmarkedColor = color(100);
+  int unavailableColor = color(50);
 
   int playerTurn = 1;
   int player1Value = 1;
@@ -207,7 +223,7 @@ class Game {
   Game() {}
 
 
-  void checkForGoAnywhere() {
+  public void checkForGoAnywhere() {
     for (BigTile big : bigTiles) {
       if (big.numMarked == 9 || big.winner != 0 && idToPlayOn == big.id) {
         goAnywhere = true;
@@ -215,7 +231,7 @@ class Game {
     }
   }
 
-  void getValues() {
+  public void getValues() {
     values[0] = bigTiles[0].winner + bigTiles[3].winner + bigTiles[6].winner; //refer to diagram 2
     values[1] = bigTiles[1].winner + bigTiles[4].winner + bigTiles[7].winner;
     values[2] = bigTiles[2].winner + bigTiles[5].winner + bigTiles[8].winner;
@@ -227,7 +243,7 @@ class Game {
     //values = {v1, v2, v3, h1, h2, h3, d1, d2};
   }
 
-  void determineWin() { //determines winner
+  public void determineWin() { //determines winner
     for (int i = 0; i < values.length; i++) {
       if (values[i] == player1Value*3) {
         winner = player1Value;
@@ -248,7 +264,7 @@ class Game {
     }
   }
 
-  void alert(int winner) { //gui for play again
+  public void alert(int winner) { //gui for play again
     playerTurn = 0;
     fill(210);
     if (winner == player1Value) {
@@ -292,7 +308,7 @@ class Game {
     }
   }
 
-  void run() {
+  public void run() {
     if (winner != 0) {
       alert(winner);
     } else {
@@ -303,7 +319,7 @@ class Game {
   }
 }
 
-void restartGame() { //resets everything
+public void restartGame() { //resets everything
   game = new Game();
   bigTiles = new BigTile[9];
 
@@ -365,19 +381,19 @@ class BigTile {
     }
   }
 
-  void display() {
+  public void display() {
     for (Tile tile : tiles) {
       tile.display();
     }
   }
 
-  void changeColor() {
+  public void changeColor() {
     for (Tile tile : tiles) {
       tile.changeColor();
     }
   }
 
-  void getValues() {
+  public void getValues() {
     values[0] = tiles[0].value + tiles[3].value + tiles[6].value; //refer to diagram 2
     values[1] = tiles[1].value + tiles[4].value + tiles[7].value;
     values[2] = tiles[2].value + tiles[5].value + tiles[8].value;
@@ -390,7 +406,7 @@ class BigTile {
     values[7] = tiles[2].value + tiles[4].value + tiles[6].value;
   }
 
-  void determineWin() { //determines winner of big tile
+  public void determineWin() { //determines winner of big tile
     for (int i = 0; i < values.length; i++) {
       if (values[i] == game.player1Value*3) {
         winner = game.player1Value;
@@ -411,7 +427,7 @@ class BigTile {
     }
   }
 
-  void run() {
+  public void run() {
     display();
     if (winner == 0 && game.idToPlayOn == id) { //play on id
       if (debug && frameCount > debugFrameCount + 15) {
@@ -420,7 +436,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.hasColorChanged()) {
+        if (small.changedColor()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
@@ -434,7 +450,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.hasColorChanged()) {
+        if (small.changedColor()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
@@ -449,8 +465,18 @@ class BigTile {
   }
 }
 
-void keyPressed() {
+public void keyPressed() {
   if (key == 'r') {
     restartGame();
+  }
+}
+  public void settings() {  size(900, 900); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "UltimateTicTacToe" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
   }
 }

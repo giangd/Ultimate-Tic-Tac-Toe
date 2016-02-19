@@ -27,7 +27,7 @@
 // d is diagonal
 
 double debugFrameCount;
-boolean debug = false; //for bug that made tile in middle get marked after user pressed play again 
+boolean debug = false; //for dumb bug that made tile in middle get marked after user pressed play again 
 Game game = new Game();
 BigTile bigTile;
 BigTile bigTile2;
@@ -90,7 +90,7 @@ class Tile {
   int h = 100;
   int value = 0;
   boolean marked = false;
-  boolean hasColorChanged = false;
+  boolean changedColor = false;
   color c = color(game.unmarkedColor);
 
   Tile(int x, int y, int id, int id2) {
@@ -106,9 +106,9 @@ class Tile {
     rect(x, y, w, h);
   }
 
-  Boolean hasColorChanged() {
-    if (hasColorChanged) {
-      hasColorChanged = false;
+  Boolean changedColor() {
+    if (changedColor) {
+      changedColor = false;
       return true;
     } else {
       return false;
@@ -147,7 +147,7 @@ class Tile {
             marked = true;
             game.playerTurn = 2;
             value = game.player1Value;
-            hasColorChanged = true;
+            changedColor = true;
             game.goAnywhere = false;
           } else {
             c = game.player1PreviewColor;
@@ -159,7 +159,7 @@ class Tile {
             marked = true;
             game.playerTurn = 1;
             value = game.player2Value;
-            hasColorChanged = true;
+            changedColor = true;
             game.goAnywhere = false;
             } else {
               c = game.player2PreviewColor;
@@ -420,7 +420,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.hasColorChanged()) {
+        if (small.changedColor()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
@@ -434,7 +434,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.hasColorChanged()) {
+        if (small.changedColor()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
