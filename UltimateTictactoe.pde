@@ -1,3 +1,6 @@
+//95 colorChanged boolean name change fixed webpage bug
+//the original variable had the same name as a function in that class
+
 //webpage doesnt work
 //prints hi only once?
 
