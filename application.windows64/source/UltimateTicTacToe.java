@@ -15,7 +15,7 @@ import java.io.IOException;
 public class UltimateTicTacToe extends PApplet {
 
 //webpage doesnt work
-//prints hi only once?
+//when player fills up last spot then next player gets to go anywhere FIXED line 212
 
 //maybe let user choose if they want to play freestyle or ultimate
 
@@ -43,7 +43,7 @@ public class UltimateTicTacToe extends PApplet {
 // d is diagonal
 
 double debugFrameCount;
-boolean debug = false; //for dumb bug that made tile in middle get marked after user pressed play again 
+boolean debug = false; //for bug that made tile in middle get marked after user pressed play again 
 Game game = new Game();
 BigTile bigTile;
 BigTile bigTile2;
@@ -106,7 +106,7 @@ class Tile {
   int h = 100;
   int value = 0;
   boolean marked = false;
-  boolean changedColor = false;
+  boolean hasColorChanged = false;
   int c = color(game.unmarkedColor);
 
   Tile(int x, int y, int id, int id2) {
@@ -122,9 +122,9 @@ class Tile {
     rect(x, y, w, h);
   }
 
-  public Boolean changedColor() {
-    if (changedColor) {
-      changedColor = false;
+  public Boolean hasColorChanged() {
+    if (hasColorChanged) {
+      hasColorChanged = false;
       return true;
     } else {
       return false;
@@ -163,7 +163,7 @@ class Tile {
             marked = true;
             game.playerTurn = 2;
             value = game.player1Value;
-            changedColor = true;
+            hasColorChanged = true;
             game.goAnywhere = false;
           } else {
             c = game.player1PreviewColor;
@@ -175,7 +175,7 @@ class Tile {
             marked = true;
             game.playerTurn = 1;
             value = game.player2Value;
-            changedColor = true;
+            hasColorChanged = true;
             game.goAnywhere = false;
             } else {
               c = game.player2PreviewColor;
@@ -225,7 +225,7 @@ class Game {
 
   public void checkForGoAnywhere() {
     for (BigTile big : bigTiles) {
-      if (big.numMarked == 9 || big.winner != 0 && idToPlayOn == big.id) {
+      if (big.numMarked == 9 && big.winner != 0 && idToPlayOn == big.id) {
         goAnywhere = true;
       }
     }
@@ -436,7 +436,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.changedColor()) {
+        if (small.hasColorChanged()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
@@ -450,7 +450,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.changedColor()) {
+        if (small.hasColorChanged()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }

@@ -1,5 +1,5 @@
 //webpage doesnt work
-//prints hi only once?
+//when player fills up last spot then next player gets to go anywhere FIXED line 212
 
 //maybe let user choose if they want to play freestyle or ultimate
 
@@ -209,7 +209,7 @@ class Game {
 
   void checkForGoAnywhere() {
     for (BigTile big : bigTiles) {
-      if (big.numMarked == 9 || big.winner != 0 && idToPlayOn == big.id) {
+      if (big.numMarked == 9 && big.winner != 0 && idToPlayOn == big.id) {
         goAnywhere = true;
       }
     }
