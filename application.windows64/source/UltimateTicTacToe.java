@@ -225,7 +225,7 @@ class Game {
 
   public void checkForGoAnywhere() {
     for (BigTile big : bigTiles) {
-      if (big.numMarked == 9 && big.winner != 0 && idToPlayOn == big.id) {
+      if (idToPlayOn == big.id && big.numMarked == 9) {
         goAnywhere = true;
       }
     }
@@ -429,6 +429,9 @@ class BigTile {
 
   public void run() {
     display();
+    if (winner != 0) {
+      numMarked = 9;
+    }
     if (winner == 0 && game.idToPlayOn == id) { //play on id
       if (debug && frameCount > debugFrameCount + 15) {
         changeColor();
