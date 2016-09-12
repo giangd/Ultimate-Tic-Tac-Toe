@@ -64,6 +64,7 @@ void setup() {
 }
 
 void draw() {
+  //game.goAnywhere = true;
   background(210);
   // bigTile.run();
   // bigTile2.run();
@@ -243,7 +244,7 @@ class Game {
         }
       }
     }
-    if (markedTiles == 81) {
+    if (markedTiles == 81 && winner == 0) {
       winner = tieValue;
     }
   }
