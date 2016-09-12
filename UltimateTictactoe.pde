@@ -1,3 +1,6 @@
+//small.hasColorChanged and small.hasColorChanged() have same name
+//so i changed the function name to small.checkHasColorChanged()
+
 //webpage doesnt work
 //when player fills up last spot then next player gets to go anywhere FIXED line 212
 
@@ -107,7 +110,7 @@ class Tile {
     rect(x, y, w, h);
   }
 
-  Boolean hasColorChanged() {
+  Boolean checkHasColorChanged() {
     if (hasColorChanged) {
       hasColorChanged = false;
       return true;
@@ -424,7 +427,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.hasColorChanged()) {
+        if (small.checkHasColorChanged()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
@@ -438,7 +441,7 @@ class BigTile {
         changeColor();
       }
       for (Tile small : tiles) {
-        if (small.hasColorChanged()) {
+        if (small.checkHasColorChanged()) {
           game.idToPlayOn = small.id; //set id to play on to the small tile's id
           numMarked++;
         }
